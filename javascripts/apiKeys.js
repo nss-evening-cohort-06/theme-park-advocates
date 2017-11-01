@@ -20,7 +20,11 @@ const retrieveKeys = () => {
       console.log(results);
       firebaseApi.setKey(results.firebaseKeys);
       firebase.initializeApp(results.firebaseKeys);
-      
+      // Demonstrates that each of the four possible Firebase requests are working
+      console.log(firebaseApi.getAreas());
+      console.log(firebaseApi.getAttractions());
+      console.log(firebaseApi.getAttractionTypes());
+      console.log(firebaseApi.getParkInfo());
     })
     .catch((error) => {
       console.log(error);

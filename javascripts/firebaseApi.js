@@ -8,7 +8,7 @@ const setKey = (key) => {
   console.log(firebaseKey);
 };
 
-const getParkData = (collection) => {
+const getFirebaseData = (collection) => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/${collection}.json`)
       .then((data) => {
@@ -22,20 +22,21 @@ const getParkData = (collection) => {
   });
 };
 
+
 const getAreas = () => {
-  return getParkData("areas");
+  return getFirebaseData("areas");
 };
 
 const getAttractions = () => {
-  return getParkData("attractions");
+  return getFirebaseData("attractions");
 };
 
 const getAttractionTypes = () => {
-  return getParkData("attraction_types");
+  return getFirebaseData("attraction_types");
 };
 
 const getParkInfo = () => {
-  return getParkData("park-info");
+  return getFirebaseData("park-info");
 };
 
 
