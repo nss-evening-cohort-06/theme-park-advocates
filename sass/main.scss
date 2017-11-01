@@ -1,7 +1,50 @@
 @import "variables";
 
-body {
-  background-color: $brown;
+#mainContainer {
+	margin: 2%;
+}
+
+#listContainer {
+	min-height: 70vh;
+	text-align: center;
+}
+
+#mapContainer {
+	min-height: 70vh;
+	text-align: center;
+
+
+
+	.areas {
+	height: 20vh;
+	}	
+}
+#area1 {
+	background-color: $area1;
+}
+
+#area2 {
+	background-color: $area2;
+}
+
+#area3 {
+	background-color: $area3;
+}
+
+#area4 {
+	background-color: $area4;
+}
+
+#area5 {
+	background-color: $area5;
+}
+
+#area6 {
+	background-color: $area6;
+}
+
+#area7 {
+	background-color: $area7;
 }
 
 .navbar {
@@ -18,3 +61,4 @@ body {
   top: 0px;
   left: 20px;
 }
+
