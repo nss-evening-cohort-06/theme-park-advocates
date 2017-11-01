@@ -2,6 +2,9 @@
 
 let firebaseKey = "";
 
+const getKey = () => {
+  return firebaseKey;
+};
 
 const setKey = (key) => {
   firebaseKey = key;
