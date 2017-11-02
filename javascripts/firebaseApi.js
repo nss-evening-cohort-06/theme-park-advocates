@@ -28,7 +28,14 @@ const getAreas = () => {
 };
 
 const getAttractions = () => {
-  return getFirebaseData("attractions");
+  return new Promise((resolve, reject) => {
+    getFirebaseData("attractions").then((data) => {
+      resolve(data);
+      console.log(data);
+    }).catch((error) => {
+      console.log("error in get attractions", error);
+    });
+  });
 };
 
 const getAttractionTypes = () => {
