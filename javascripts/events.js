@@ -21,6 +21,9 @@ const reduceToAreas = (attractionArray) => {
 
 // 
 const highlightAreas = (numArray) => {
+	while ($(".dotborder").length) {
+		$(".dotborder")[0].classList.remove("dotborder");
+	}
   numArray.forEach((areaId) => {
     $(`#area${areaId}`).addClass("dotborder");
   });
