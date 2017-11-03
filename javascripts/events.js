@@ -2,16 +2,31 @@
 const firebaseApi = require("./firebaseApi");
 
 const checkAreaMatch = (attraction) => {
-  return attraction.name.includes($("#searchBox").val());
+  let searchString = $("#searchBox").val().toLowerCase();
+  return attraction.name.toLowerCase().includes(searchString);
 };
 
+const getAttractionArea = (attraction) => {
+  return attraction.area_id;
+};
+
+const reduceToAreas = (attractionArray) => {
+  return attractionArray.map(getAttractionArea);
+};
+
+const highlightAreas = (numArray) => {
+  numArray.forEach((areaId) => {
+    $(`#area${areaId}`).addClass("dotborder");
+  });
+};
 
 const highlightMatchingAreas = (e) => {
   console.log(e);
   if (e.key === "Enter") {
     firebaseApi.getAttractions()
       .then((attractions) => { return attractions.filter(checkAreaMatch); })
-      .then((filtered) => { console.log(filtered); });
+      .then(reduceToAreas)
+      .then(highlightAreas);
   }
 };
 
