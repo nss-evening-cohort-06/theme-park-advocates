@@ -19,13 +19,14 @@ const reduceToAreas = (attractionArray) => {
   return attractionArray.map(getAttractionArea);
 };
 
-
+// 
 const highlightAreas = (numArray) => {
   numArray.forEach((areaId) => {
     $(`#area${areaId}`).addClass("dotborder");
   });
 };
 
+// Main function which fires on Enter press in search box
 const highlightMatchingAreas = (e) => {
   console.log(e);
   if (e.key === "Enter") {
@@ -35,9 +36,6 @@ const highlightMatchingAreas = (e) => {
       .then(highlightAreas);
   }
 };
-
-
-
 
 const searchBox = () => {
   $("#searchBox").keypress(highlightMatchingAreas);
