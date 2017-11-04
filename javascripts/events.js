@@ -2,7 +2,6 @@
 
 const firebaseApi = require('./firebaseApi');
 const dom = require('./dom');
-console.log("dom in events", dom);
 
 const searchBox = () => {
   
@@ -32,4 +31,11 @@ $('.areas').click((e) => {
 			console.log(err);
 		});
 });
+
+//prints current date and time in list container; also gets hour only to use for filter
+
+
+
+
+
 
