@@ -6,8 +6,8 @@ console.log("dom in events", dom);
 // Object -> Boolean
 // Checks whether the object's "name" key includes the search text and returns true or false
 const checkAreaMatch = (attraction) => {
-  let searchString = $("#searchBox").val().toLowerCase();
-  return attraction.name.toLowerCase().includes(searchString);
+	let searchValue = new RegExp($("#searchBox").val(), "i");
+	return attraction.name.match(searchValue);
 };
 
 // Object -> Number
@@ -34,7 +34,6 @@ const highlightAreas = (numArray) => {
 
 // Main function which fires on Enter press in search box
 const highlightMatchingAreas = (e) => {
-  console.log(e);
   if (e.key === "Enter") {
     firebaseApi.getAttractions()
       .then((attractions) => { return attractions.filter(checkAreaMatch); })
