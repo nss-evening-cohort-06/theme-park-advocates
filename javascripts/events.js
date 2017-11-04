@@ -4,9 +4,10 @@ const dom = require('./dom');
 console.log("dom in events", dom);
 
 // Object -> Boolean
-// Checks whether the object's "name" key includes the search text and returns true or false
-const checkAreaMatch = (attraction) => {
-	let searchValue = new RegExp($("#searchBox").val(), "i");
+// Checks whether the object's "name" key includes the search text and returns true or false for filtering purposes
+const checkSearchMatch = (attraction) => {
+	let searchValue = new RegExp($("#searchBox").val().split(' ').join(`\s*`), "i");
+	console.log(searchValue);
 	return attraction.name.match(searchValue);
 };
 
@@ -34,9 +35,9 @@ const highlightAreas = (numArray) => {
 
 // Main function which fires on Enter press in search box
 const highlightMatchingAreas = (e) => {
-  if (e.key === "Enter") {
+	if (e.key === "Enter" && $("#searchBox").val().length) {
     firebaseApi.getAttractions()
-      .then((attractions) => { return attractions.filter(checkAreaMatch); })
+      .then((attractions) => { return attractions.filter(checkSearchMatch); })
       .then(reduceToAreas)
       .then(highlightAreas);
   }
