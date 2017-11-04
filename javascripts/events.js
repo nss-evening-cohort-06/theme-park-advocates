@@ -25,9 +25,7 @@ const reduceToAreas = (attractionArray) => {
 
 // removes the dotted border from any previous searches and then outlines any areas with attractions matching the given IDs
 const highlightAreas = (numArray) => {
-	while ($(".dotborder").length) {
-		$(".dotborder")[0].classList.remove("dotborder");
-	}
+	$(".dotborder").removeClass("dotborder");
   numArray.forEach((areaId) => {
     $(`#area${areaId}`).addClass("dotborder");
   });
@@ -36,14 +34,15 @@ const highlightAreas = (numArray) => {
 // Main function which fires on Enter press in search box
 const highlightMatchingAreas = (e) => {
 	if (e.key === "Enter" && $("#searchBox").val().length) {
-    firebaseApi.getAttractions()
+		firebaseApi.getAttractions()
+			.catch((error) => console.log(error))	
       .then((attractions) => { return attractions.filter(checkSearchMatch); })
       .then(reduceToAreas)
       .then(highlightAreas);
   }
 };
 
-// initialized searchBox event listener
+// initializes searchBox event listener
 const searchBox = () => {
   $("#searchBox").keypress(highlightMatchingAreas);
 };
