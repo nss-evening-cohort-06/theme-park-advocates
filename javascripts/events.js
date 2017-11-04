@@ -6,9 +6,9 @@ console.log("dom in events", dom);
 // Object -> Boolean
 // Checks whether the object's "name" key includes the search text and returns true or false for filtering purposes
 const checkSearchMatch = (attraction) => {
-	let searchValue = new RegExp($("#searchBox").val().split(' ').join(`\s*`), "i");
+	let searchValue = new RegExp($("#searchBox").val().split(" ").join(""), "i");
 	console.log(searchValue);
-	return attraction.name.match(searchValue);
+	return (attraction.name.split(" ").join("").match(searchValue) && !attraction.out_of_order);
 };
 
 // Object -> Number
