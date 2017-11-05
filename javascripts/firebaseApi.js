@@ -32,6 +32,8 @@ const getAreas = () => {
   return getFirebaseData("areas");
 };
 
+
+//returns an array of all 131 attractions
 const getAttractions = () => {
   return new Promise((resolve, reject) => {
     getFirebaseData("attractions").then((data) => {
@@ -82,27 +84,36 @@ const getAttractionsByArea = (area_id) => {
 //if no time is passed in, run it on current time.
 const setCurrentTime = () => {
   let realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
-  return moment(realTime, "MMMM Do YYYY, h:mm:ss a").format("h:00A");
+  return moment(realTime, "MMMM Do YYYY, h:mm:ss a").format("h");
 };
 
 const showCurrentEvents = () => {
-  let hour = setCurrentTime('1:00PM');
+  let currentHour = setCurrentTime();
+  console.log("currentHour", currentHour);
   let currentEventsArray = [];
+  let eventsAtCurrentHour = [];
   getAttractions().then((attractions) => {
     Object.keys(attractions).forEach((attraction) => {
       if (attractions[attraction].times) {
         currentEventsArray.push(attractions[attraction]);
       }
+      
     });
     currentEventsArray.forEach((item) => {
       item.times.forEach((time) => {
-        let time_hour = moment().hour(time.split(':')[0]).minute(0).second(0).format("h:00A");
-        console.log("time", time_hour);
-        if (time_hour === hour) {
-
+        let time_hour = moment().hour(time.split(':')[0]).minute(0).second(0).format("h");
+        console.log("time_hour", time_hour);
+        if (time_hour === currentHour) {
+          console.log("item", item);
+          eventsAtCurrentHour.push(item);
+          
+          
         }
+        
       });
     });
+    console.log("currentEventsArray", currentEventsArray);
+    console.log("eventsAtCurrentHour", eventsAtCurrentHour);
   });
 };
 
