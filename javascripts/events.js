@@ -46,8 +46,13 @@ const searchBox = () => {
   $("#searchBox").keypress(highlightMatchingAreas);
 };
 
+const attractionLink = () => {
+	$(".individual-attraction").on("click", dom.revealDetails);
+};
+
 const initializeEvents = () => {
-  searchBox();
+	searchBox();
+	attractionLink();
 };
 
 module.exports = { initializeEvents };
@@ -72,6 +77,7 @@ $('.areas').click((e) => {
 		});
 		console.log("attractionsWithTypes?", attractionsWithTypes);
 		dom.printAttractionsArray(attractionsWithTypes);
+		attractionLink();
 	}).catch((err) => {
 			console.log(err);
 		});
