@@ -8,7 +8,7 @@ console.log("in main.js");
 
 const main = () => {
   apiKeys.retrieveKeys();
-  
+  events.initializeEvents();
 };
 
 main();
