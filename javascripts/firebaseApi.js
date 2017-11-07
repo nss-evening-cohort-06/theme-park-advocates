@@ -228,7 +228,7 @@ const underMaintenance = (selectedAttractions, value) => {
   });
 };
 
-// evaluate if attractions "out_of_order" status is not true and push into array
+// evaluate if attractions "out_of_order" status is not true and push into workingAttractions array
 const outOfOrderRides = (selectedAttractions, value) => {
   let workingAttractions = [];
   let outOfOrderAttractions = [];
