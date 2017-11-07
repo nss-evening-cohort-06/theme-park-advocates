@@ -135,10 +135,8 @@ const showEventsByTime = (time) => {
 
   if(!time) {
     displayedHour = moment(setCurrentTime(), "h:mmA").hour();
-    console.log("!displayedHour", displayedHour);
   }else{ 
     displayedHour = moment(time, "h:mmA").hour();
-    console.log("displayedHour", displayedHour);
   }
 
   let displayedEventsArray = [];
@@ -152,14 +150,11 @@ const showEventsByTime = (time) => {
     displayedEventsArray.forEach((item) => {
       item.times.forEach((time) => {
         let time_hour = moment(time, "h:mmA").hour();
-        console.log("time_hour", time_hour);
-        console.log("displayedHour", displayedHour);
         if (time_hour === displayedHour) {
           eventsAtDisplayedHour.push(item); 
         }       
       });
     });
-    console.log("eventsAtDisplayedHour", eventsAtDisplayedHour);
     dom.printAttractionsWithAreas(eventsAtDisplayedHour);
 };
 

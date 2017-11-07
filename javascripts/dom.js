@@ -25,7 +25,6 @@ let printAttractionsWithTypes = (attractionsWithTypes) => {
 let printAttractionsWithAreas = (attractionsWithAreas) => {
 	let domString = '';
 		for(let i = 0; i < attractionsWithAreas.length; i++) {
-			console.log(attractionsWithAreas[i]);
 	domString += `<div class="text-left">
 									<a href=""><p class="">${attractionsWithAreas[i].name}</a> (${attractionsWithAreas[i].area_name})</p>
 									<div id="attractionDescription" class="hide">
