@@ -109,7 +109,7 @@ const attractionsWithAreaName = () => {
         }
       });
     });
-      // showEventsByTime();
+       showEventsByTime();
     }).catch((err) => {
       console.log(err);
   });
@@ -124,5 +124,44 @@ const getHoursOfOperation = () => {
   dom.populateHoursOfOperation(hoursOfOperation);
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName};
+const setCurrentTime = () => {
+  let realTime = "";
+  realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
+  return moment(realTime, "MMMM DO YYYY, h:mm:ss a").format("H:00A");
+};
+
+const showEventsByTime = (time) => {
+  let displayedHour;  
+
+  if(!time) {
+    displayedHour = moment(setCurrentTime(), "h:mmA").hour();
+    console.log("!displayedHour", displayedHour);
+  }else{ 
+    displayedHour = moment(time, "h:mmA").hour();
+    console.log("displayedHour", displayedHour);
+  }
+
+  let displayedEventsArray = [];
+  let eventsAtDisplayedHour = [];
+
+  attractionsWithAreaNames.forEach((attraction) => {
+      if (attraction.times) {
+        displayedEventsArray.push(attraction);
+      }     
+    });
+    displayedEventsArray.forEach((item) => {
+      item.times.forEach((time) => {
+        let time_hour = moment(time, "h:mmA").hour();
+        console.log("time_hour", time_hour);
+        console.log("displayedHour", displayedHour);
+        if (time_hour === displayedHour) {
+          eventsAtDisplayedHour.push(item); 
+        }       
+      });
+    });
+    console.log("eventsAtDisplayedHour", eventsAtDisplayedHour);
+    dom.printAttractionsWithAreas(eventsAtDisplayedHour);
+};
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
 
