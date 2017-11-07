@@ -55,7 +55,6 @@ const displayAttractionsByArea = () =>	{
 	});
 };
 
-
 const selectAttractionsTime = () => {
 	$('#hoursDropdown').on('click', '.dropdown-item', (e) => {
 		console.log("selected time", e.target.innerHTML);

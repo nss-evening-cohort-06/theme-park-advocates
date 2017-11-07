@@ -13,7 +13,6 @@ const getKey = () => {
 const setKey = (key) => {
   firebaseKey = key;
   getHoursOfOperation();
-  showCurrentEvents();
   attractionsWithAreaName();
 
 };
@@ -110,12 +109,11 @@ const attractionsWithAreaName = () => {
         }
       });
     });
-       return attractionsWithAreaNames;
+      // showEventsByTime();
     }).catch((err) => {
       console.log(err);
   });
 };
-
 
 const getHoursOfOperation = () => {
   let hour = '';
@@ -126,45 +124,4 @@ const getHoursOfOperation = () => {
   dom.populateHoursOfOperation(hoursOfOperation);
 };
 
-// Kelly's:
-
-const setCurrentTime = () => {
-  let realTime = "";
-  realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
-  return moment(realTime, "MMMM Do YYYY, h:mm:ss a").format("H:00A");
-};
-
-const showCurrentEvents = (time) => {
-  let displayedHour;  
-
-  if(!time) {
-    displayedHour = moment(setCurrentTime(), "h:mmA").hour();
-    console.log("!displayedHour", displayedHour);
-  }else{ 
-    displayedHour = moment(time, "h:mmA").hour();
-    console.log("displayedHour", displayedHour);
-  }
-
-  let displayedEventsArray = [];
-  let eventsAtDisplayedHour = [];
-
-  attractionsWithAreaNames.forEach((attraction) => {
-      if (attraction.times) {
-        displayedEventsArray.push(attraction);
-      }     
-    });
-
-    displayedEventsArray.forEach((item) => {
-      item.times.forEach((time) => {
-        let time_hour = moment(time, "h:mmA").hour();
-        if (time_hour === displayedHour) {
-          eventsAtDisplayedHour.push(item); 
-        }       
-      });
-    });
-    console.log("eventsAtDisplayedHour", eventsAtDisplayedHour);
-    dom.printAttractionsWithAreas(eventsAtDisplayedHour);
-};
-
-
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName,showCurrentEvents};
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName};
