@@ -34,7 +34,7 @@ const highlightAreas = (numArray) => {
 const highlightMatchingAreas = (e) => {
 	if (e.key === "Enter" && $("#searchBox").val().length) {
 		firebaseApi.getAttractions()
-			.catch((error) => console.log(error))	
+			.catch((error) => console.log(error))
       .then((attractions) => { return attractions.filter(checkSearchMatch); })
       .then(reduceToAreas)
       .then(highlightAreas);
@@ -47,7 +47,7 @@ const searchBox = () => {
 };
 
 // Event to display attractions in the list container when an area is clicked in the map:
-const displayAttractionsByArea = () =>	{ 
+const displayAttractionsByArea = () =>	{
 	$('.areas').click((e) => {
 		// Grab the area id number from the id assigned to the element in index.html:
 		let area_id = e.target.id.slice(4, 5);
@@ -62,11 +62,16 @@ const selectAttractionsTime = () => {
 	});
 };
 
+// Add copyright date to the bottom of the page
+const copyrightDate = () => {
+  $("#copyright").append(moment().format('L'));
+};
+
 const initializeEvents = () => {
   searchBox();
   displayAttractionsByArea();
   selectAttractionsTime();
+	copyrightDate();
 };
 
 module.exports = { initializeEvents };
-
