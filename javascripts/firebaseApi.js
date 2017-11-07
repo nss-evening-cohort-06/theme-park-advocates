@@ -3,6 +3,8 @@
 const dom = require("./dom");
 
 let firebaseKey = "";
+let hoursOfOperation = [];
+let attractionsWithAreaNames = [];
 
 const getKey = () => {
   return firebaseKey;
@@ -11,7 +13,8 @@ const getKey = () => {
 
 const setKey = (key) => {
   firebaseKey = key;
-  showCurrentEvents();
+  getHoursOfOperation();
+  attractionsWithAreaName();
 };
 
 const getFirebaseData = (collection) => {
@@ -29,19 +32,17 @@ const getFirebaseData = (collection) => {
 };
 
 const getAreas = () => {
-  return getFirebaseData("areas");
+  return new Promise((resolve, reject) => {
+    getFirebaseData("areas").then((areas) => {
+    resolve(areas);
+    });
+  });
 };
 
-
-//returns an array of all 131 attractions
 const getAttractions = () => {
   return new Promise((resolve, reject) => {
-    getFirebaseData("attractions").then((data) => {
-      resolve(data);
-      console.log("attractions data", data);
-
-    }).catch((error) => {
-      console.log("error in get attractions", error);
+    getFirebaseData("attractions").then((attractions) => {
+    resolve(attractions);
     });
   });
 };
@@ -76,54 +77,52 @@ const getAttractionsByArea = (area_id) => {
   });
 };
 
-
-
-//in order for Jessica to use these functions too, pass a parameter thru 
-//setCurrentTime, which would look at the selected time in drop down;
-//write logic that if a time is passed in, look at that time for comparison;
-//if no time is passed in, run it on current time.
-const setCurrentTime = () => {
-  let realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
-  return moment(realTime, "MMMM Do YYYY, h:mm:ss a").format("h");
-};
-
-const showCurrentEvents = () => {
-  let currentHour = setCurrentTime();
-  console.log("currentHour", currentHour);
-  let currentEventsArray = [];
-  let eventsAtCurrentHour = [];
-  getAttractions().then((attractions) => {
-    Object.keys(attractions).forEach((attraction) => {
-      if (attractions[attraction].times) {
-        currentEventsArray.push(attractions[attraction]);
-      }
-      
-    });
-    currentEventsArray.forEach((item) => {
-      item.times.forEach((time) => {
-        let time_hour = moment().hour(time.split(':')[0]).minute(0).second(0).format("h");
-        console.log("time_hour", time_hour);
-        if (time_hour === currentHour) {
-          console.log("item", item);
-          eventsAtCurrentHour.push(item);
-          
-          
+const addAttractionTypeName = (area_id) => {
+  let attractionsWithTypes = [];
+  // The following Promise.all will return an array containing 3 indexes, 0 will be an array consisting all attractions with an area_id matching the area_id of e.target (from getAttractionsByArea), 1 will be an array consisting of all types (from getAttractionsByType):
+  Promise.all([getAttractionsByArea(area_id), getAttractionTypes()])
+  .then((values) => { 
+    values[0].forEach((attraction) => {
+      values[1].forEach((type) => {
+        // Conditional to add type_name key to attraction with a value equal to type.name provided that the type.id and attractions.type_id are the same:
+        if (type.id == attraction.type_id) {
+          attraction.type_name = type.name;
+          // Push the attractions that now have a key of type_name into the attractionsWithTypes array wich can then be passed into the dom function to print:
+          attractionsWithTypes.push(attraction);
         }
-        
       });
     });
-    console.log("currentEventsArray", currentEventsArray);
-    console.log("eventsAtCurrentHour", eventsAtCurrentHour);
+    dom.printAttractionsWithTypes(attractionsWithTypes);
+  }).catch((err) => {
+      console.log(err);
+    });
+};
+
+const attractionsWithAreaName = () => {
+  Promise.all([getAttractions(), getAreas()])
+  .then((values) => {
+    values[0].forEach((attraction) => {
+      values[1].forEach((area) => {
+        if(area.id === attraction.area_id){
+          attraction.area_name = area.name;
+          attractionsWithAreaNames.push(attraction);
+        }
+      });
+    });
+      // showEventsByTime();
+    }).catch((err) => {
+      console.log(err);
   });
 };
 
-
-module.exports = {
-  setKey,
-  getAreas,
-  getAttractionTypes,
-  getAttractions,
-  getParkInfo,
-  getKey,
-  getAttractionsByArea
+const getHoursOfOperation = () => {
+  let hour = '';
+  for(let i = 9; i < 22; i++) {
+    hour = moment(`${i}`, 'H').format('h:mmA');
+    hoursOfOperation.push(hour);
+  }
+  dom.populateHoursOfOperation(hoursOfOperation);
 };
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName};
+
