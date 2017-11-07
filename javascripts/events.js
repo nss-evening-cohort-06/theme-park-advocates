@@ -4,23 +4,27 @@
 const firebaseApi = require("./firebaseApi");
 
 // Object -> Boolean
-const checkAreaMatch = (attraction) => {
-  let searchString = $("#searchBox").val().toLowerCase();
-  return attraction.name.toLowerCase().includes(searchString);
+// Checks whether the object's "name" key includes the search text and returns true or false for filtering purposes
+const checkSearchMatch = (attraction) => {
+	let searchValue = new RegExp($("#searchBox").val().split(" ").join(""), "i");
+	return (attraction.name.split(" ").join("").match(searchValue) && !attraction.out_of_order);
 };
 
 // Object -> Number
+// reduces an attraction object to just the value of its "area" key
 const getAttractionArea = (attraction) => {
   return attraction.area_id;
 };
 
 // [Object] -> [Number]
+// takes in an array of attraction objects and returns an array of all of their area IDs
 const reduceToAreas = (attractionArray) => {
   return attractionArray.map(getAttractionArea);
 };
 
-// 
+// removes the dotted border from any previous searches and then outlines any areas with attractions matching the given IDs
 const highlightAreas = (numArray) => {
+	$(".dotborder").removeClass("dotborder");
   numArray.forEach((areaId) => {
     $(`#area${areaId}`).addClass("dotborder");
   });
@@ -28,15 +32,16 @@ const highlightAreas = (numArray) => {
 
 // Main function which fires on Enter press in search box
 const highlightMatchingAreas = (e) => {
-  console.log(e);
-  if (e.key === "Enter") {
-    firebaseApi.getAttractions()
-      .then((attractions) => { return attractions.filter(checkAreaMatch); })
+	if (e.key === "Enter" && $("#searchBox").val().length) {
+		firebaseApi.getAttractions()
+			.catch((error) => console.log(error))	
+      .then((attractions) => { return attractions.filter(checkSearchMatch); })
       .then(reduceToAreas)
       .then(highlightAreas);
   }
 };
 
+// initializes searchBox event listener
 const searchBox = () => {
   $("#searchBox").keypress(highlightMatchingAreas);
 };
