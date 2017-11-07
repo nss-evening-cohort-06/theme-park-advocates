@@ -1,21 +1,48 @@
 "use strict";
 
+let populateHoursOfOperation = (hoursOfOperation) => {
+	let domString = '';
+	for (let i = 0; i < hoursOfOperation.length; i++) {
+		domString += `<li class="dropdown-item">${hoursOfOperation[i]}</li>`;
+	}
+	printHoursOfOperation(domString);
+};
+
 // Prints all attractions with an area_id matching the area_id of e.target to the list container:
-let printAttractionsArray = (attractionsWithTypes) => {
+let printAttractionsWithTypes = (attractionsWithTypes) => {
 	let domString = '';
 	for(let i = 0; i < attractionsWithTypes.length; i++) {
-	domString += `<div>
-					<a href=""><h4 class="">${attractionsWithTypes[i].name}</a> (${attractionsWithTypes[i].type_name})</h4>
+	domString += `<div class="text-left">
+					<a href=""><p class="">${attractionsWithTypes[i].name}</a> (${attractionsWithTypes[i].type_name})</p>
 					<div id="attractionDescription" class="hide">
-						<h4>${attractionsWithTypes[i].description}</h4>
+						<p>${attractionsWithTypes[i].description}</p>
 					</div>
 				  </div>`;
 	}
-	printToDom(domString);
+	printToListContainer(domString);
 };
 
-let printToDom = (strang) => {
+let printAttractionsWithAreas = (attractionsWithAreas) => {
+	let domString = '';
+		for(let i = 0; i < attractionsWithAreas.length; i++) {
+			console.log(attractionsWithAreas[i]);
+	domString += `<div class="text-left">
+					<a href=""><p class="">${attractionsWithAreas[i].name}</a> (${attractionsWithAreas[i].area_name})</p>
+					<div id="attractionDescription" class="hide">
+						<p>${attractionsWithAreas[i].description}</p>
+					</div>
+				  </div>`;
+	}
+	printToListContainer(domString);
+};
+
+
+let printHoursOfOperation = (strang) => {
+	$('#hoursDropdown').html(strang);
+};
+
+let printToListContainer = (strang) => {
 	$('#listContainer').html(strang);
 };
 
-module.exports = {printAttractionsArray};
+module.exports = {printAttractionsWithTypes, populateHoursOfOperation, printAttractionsWithAreas};
