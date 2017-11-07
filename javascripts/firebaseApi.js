@@ -1,6 +1,6 @@
 "use strict";
 
-let dom = require('./dom');
+const dom = require("./dom");
 
 let firebaseKey = "";
 let hoursOfOperation = [];
@@ -8,13 +8,13 @@ let attractionsWithAreaNames = [];
 
 const getKey = () => {
   return firebaseKey;
+
 };
 
 const setKey = (key) => {
   firebaseKey = key;
   getHoursOfOperation();
   attractionsWithAreaName();
-
 };
 
 const getFirebaseData = (collection) => {
@@ -50,9 +50,9 @@ const getAttractions = () => {
 // Returns only attraction_types:
 const getAttractionTypes = () => {
   return new Promise((resolve, reject) => {
-      getFirebaseData("attraction_types").then((attraction_types) => {
-        resolve(attraction_types);
-      });
+    getFirebaseData("attraction_types").then((attraction_types) => {
+      resolve(attraction_types);
+    });
   });
 };
 
@@ -63,17 +63,17 @@ const getParkInfo = () => {
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
   let attractions = [];
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     $.ajax(`https://theme-park-advocates.firebaseio.com/attractions.json?orderBy="area_id"&equalTo=${area_id}`)
-    .then((results) => {
-      Object.keys(results).forEach((result) => {
-        results[result].id = result;
-        attractions.push(results[result]);
+      .then((results) => {
+        Object.keys(results).forEach((result) => {
+          results[result].id = result;
+          attractions.push(results[result]);
+        });
+        resolve(attractions);
+      }).catch((err) => {
+        reject(err);
       });
-      resolve(attractions);
-    }).catch((err) => {
-      reject(err);
-    });
   });
 };
 
@@ -109,7 +109,7 @@ const attractionsWithAreaName = () => {
         }
       });
     });
-      // showEventsByTime();
+       showEventsByTime();
     }).catch((err) => {
       console.log(err);
   });
@@ -124,4 +124,39 @@ const getHoursOfOperation = () => {
   dom.populateHoursOfOperation(hoursOfOperation);
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName};
+const setCurrentTime = () => {
+  let realTime = "";
+  realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
+  return moment(realTime, "MMMM DO YYYY, h:mm:ss a").format("H:00A");
+};
+
+const showEventsByTime = (time) => {
+  let displayedHour;  
+
+  if(!time) {
+    displayedHour = moment(setCurrentTime(), "h:mmA").hour();
+  }else{ 
+    displayedHour = moment(time, "h:mmA").hour();
+  }
+
+  let displayedEventsArray = [];
+  let eventsAtDisplayedHour = [];
+
+  attractionsWithAreaNames.forEach((attraction) => {
+      if (attraction.times) {
+        displayedEventsArray.push(attraction);
+      }     
+    });
+    displayedEventsArray.forEach((item) => {
+      item.times.forEach((time) => {
+        let time_hour = moment(time, "h:mmA").hour();
+        if (time_hour === displayedHour) {
+          eventsAtDisplayedHour.push(item); 
+        }       
+      });
+    });
+    dom.printAttractionsWithAreas(eventsAtDisplayedHour);
+};
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
+

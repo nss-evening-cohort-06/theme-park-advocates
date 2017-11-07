@@ -57,9 +57,8 @@ const displayAttractionsByArea = () =>	{
 
 const selectAttractionsTime = () => {
 	$('#hoursDropdown').on('click', '.dropdown-item', (e) => {
-		console.log("selected time", e.target.innerHTML);
 		let selectedTime = e.target.innerHTML;
-		firebaseApi.showCurrentEvents(selectedTime);
+		firebaseApi.showEventsByTime(selectedTime);
 	});
 };
 
@@ -70,3 +69,4 @@ const initializeEvents = () => {
 };
 
 module.exports = { initializeEvents };
+
