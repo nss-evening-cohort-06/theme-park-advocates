@@ -6,10 +6,10 @@ let firebaseKey = "";
 let hoursOfOperation = [];
 let attractionsWithAreaNames = [];
 
-const getKey = () => {
-  return firebaseKey;
-
-};
+// const getKey = () => {
+//   return firebaseKey;
+//
+// };
 
 const setKey = (key) => {
   firebaseKey = key;
@@ -17,6 +17,7 @@ const setKey = (key) => {
   attractionsWithAreaName();
 };
 
+// Delete this one //
 const getFirebaseData = (collection) => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/${collection}.json`)
@@ -30,35 +31,79 @@ const getFirebaseData = (collection) => {
       });
   });
 };
+// End Delete This One //
 
+// --- promises to get data from each collection --- //
 const getAreas = () => {
   return new Promise((resolve, reject) => {
-    getFirebaseData("areas").then((areas) => {
-    resolve(areas);
-    });
+    $.ajax(`${firebaseKey.databaseURL}/areas.json`)
+      .then((data) => {
+        if (data != null) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 };
 
 const getAttractions = () => {
   return new Promise((resolve, reject) => {
-    getFirebaseData("attractions").then((attractions) => {
-    resolve(attractions);
-    });
+    $.ajax(`${firebaseKey.databaseURL}/attractions.json`)
+      .then((data) => {
+        if (data != null) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 };
 
-// Returns only attraction_types:
 const getAttractionTypes = () => {
   return new Promise((resolve, reject) => {
-    getFirebaseData("attraction_types").then((attraction_types) => {
-      resolve(attraction_types);
-    });
+    $.ajax(`${firebaseKey.databaseURL}/attraction_types.json`)
+      .then((data) => {
+        if (data != null) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
   });
 };
 
 const getParkInfo = () => {
-  return getFirebaseData("park-info");
+  return new Promise((resolve, reject) => {
+    $.ajax(`${firebaseKey.databaseURL}/park-info.json`)
+      .then((data) => {
+        if (data != null) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
 };
+
+const getMaintenanceTickets = () => {
+  return new Promise((resolve, reject) => {
+    $.ajax(`${firebaseKey.databaseURL}/maintenance_tickets.json`)
+      .then((data) => {
+        if (data != null) {
+          resolve(data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+// --- End of getters --- //
 
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
@@ -81,7 +126,7 @@ const addAttractionTypeName = (area_id) => {
   let attractionsWithTypes = [];
   // The following Promise.all will return an array containing 3 indexes, 0 will be an array consisting all attractions with an area_id matching the area_id of e.target (from getAttractionsByArea), 1 will be an array consisting of all types (from getAttractionsByType):
   Promise.all([getAttractionsByArea(area_id), getAttractionTypes()])
-  .then((values) => { 
+  .then((values) => {
     values[0].forEach((attraction) => {
       values[1].forEach((type) => {
         // Conditional to add type_name key to attraction with a value equal to type.name provided that the type.id and attractions.type_id are the same:
@@ -92,7 +137,7 @@ const addAttractionTypeName = (area_id) => {
         }
       });
     });
-    dom.printAttractionsWithTypes(attractionsWithTypes);
+    underMaintenance(attractionsWithTypes, true);
   }).catch((err) => {
       console.log(err);
     });
@@ -131,11 +176,11 @@ const setCurrentTime = () => {
 };
 
 const showEventsByTime = (time) => {
-  let displayedHour;  
+  let displayedHour;
 
   if(!time) {
     displayedHour = moment(setCurrentTime(), "h:mmA").hour();
-  }else{ 
+  }else{
     displayedHour = moment(time, "h:mmA").hour();
   }
 
@@ -145,18 +190,68 @@ const showEventsByTime = (time) => {
   attractionsWithAreaNames.forEach((attraction) => {
       if (attraction.times) {
         displayedEventsArray.push(attraction);
-      }     
+      }
     });
     displayedEventsArray.forEach((item) => {
       item.times.forEach((time) => {
         let time_hour = moment(time, "h:mmA").hour();
         if (time_hour === displayedHour) {
-          eventsAtDisplayedHour.push(item); 
-        }       
+          eventsAtDisplayedHour.push(item);
+        }
       });
     });
-    dom.printAttractionsWithAreas(eventsAtDisplayedHour);
+    underMaintenance(eventsAtDisplayedHour, false);
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getKey, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
+// evaluate if maintenance is currently happening and if so set out_of_order to true
+const underMaintenance = (selectedAttractions, value) => {
+  let currentTime = moment().format();
+  getMaintenanceTickets().then((tickets) => {
+    Object.keys(tickets).forEach((ticket) => {
+      Object.keys(selectedAttractions).forEach((key) => {
+        if (selectedAttractions[key].id === tickets[ticket].attraction_id){
+          let time = tickets[ticket].maintenance_date;
+          let maintenanceStart = moment(time).format();
+          let maintenanceFinish = moment(maintenanceStart).add(tickets[ticket].maintenance_duration_hours, 'hours').format();
+          //if maintenace has occured the ride is no longer out of order
+          if (moment(currentTime).isAfter(maintenanceFinish)) {
+              selectedAttractions[key].out_of_order = false;
+          }
+          // if the maintenance is occuring now mark the attraction as closed
+          if (moment(currentTime).isBetween(maintenanceStart, maintenanceFinish)) {
+              selectedAttractions[key].out_of_order = true;
+          }
+        }
+      });
+      outOfOrderRides(selectedAttractions, value);
+    });
+  });
+};
 
+// evaluate if attractions "out_of_order" status is not true and push into workingAttractions array
+const outOfOrderRides = (selectedAttractions, value) => {
+  let workingAttractions = [];
+  let outOfOrderAttractions = [];
+  if (selectedAttractions != null) {
+    Object.keys(selectedAttractions).forEach((key) => {
+      if (selectedAttractions[key].out_of_order != true) {
+        workingAttractions.push(selectedAttractions[key]);
+
+      }
+// for testing purposes remove before final deploy //
+      else {
+        outOfOrderAttractions.push(selectedAttractions[key]);
+
+      }
+          console.log("out of order rides", outOfOrderAttractions);
+// end for testing purposes remove before final deploy //
+    });
+    if (value) {
+      dom.printAttractionsWithTypes(workingAttractions);
+    } else {
+      dom.printAttractionsWithAreas(workingAttractions);
+    }
+  }
+};
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
