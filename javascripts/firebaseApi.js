@@ -8,6 +8,7 @@ let attractionsWithAreaNames = [];
 
 const setKey = (key) => {
   firebaseKey = key;
+  getAreas();
   getHoursOfOperation();
   attractionsWithAreaName();
 };
@@ -18,6 +19,7 @@ const getAreas = () => {
     $.ajax(`${firebaseKey.databaseURL}/areas.json`)
       .then((data) => {
         if (data != null) {
+          dom.populateMapInfo(data);
           resolve(data);
         }
       })
@@ -83,6 +85,7 @@ const getMaintenanceTickets = () => {
   });
 };
 // --- End of getters --- //
+
 
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
@@ -226,12 +229,14 @@ const outOfOrderRides = (selectedAttractions, value) => {
 };
 
 const theUpsideDown = (attractions) => {
-  $(".areas").removeClass('downIsUp');
+  $(".area").removeClass('downIsUp');
   $(".attractions").removeClass('upIsDown');
   let searchTerms = ["away", "beneath", "blinking", "broken", "camera", "christmas", "claws", "cruiser", "darkness", "enchanted", "evil", "film", "forgotten", "friend", "gasoline", "ghost", "gloomy", "hawkins", "hidden", "hungry", "indiana", "invisible", "labyrinth", "lights", "merlin", "mike", "monsters", "neon", "nighttime", "party", "portal", "pulsate", "school", "sheriff", "spellbinding", "supernatural", "thunder", "underground", "vintage", "waffle"];
   Object.keys(attractions).forEach((attraction) => {
     searchTerms.forEach((term) => {
      if ($.inArray(term, attractions[attraction].description.split(' ')) > -1) {
+        // console.log(term);
+        // console.log(attractions[attraction]);
         $("#attraction_"+attractions[attraction].id).addClass('upIsDown');
         $("#area"+attractions[attraction].area_id).addClass('downIsUp');
       }

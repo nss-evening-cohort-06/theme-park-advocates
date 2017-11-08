@@ -48,11 +48,11 @@ const searchBox = () => {
 
 // Event to display attractions in the list container when an area is clicked in the map:
 const displayAttractionsByArea = () =>	{
-	$('.areas').click((e) => {
-		// Grab the area id number from the id assigned to the element in index.html:
-		let area_id = e.target.id.slice(4, 5);
+	$('#areas').on('click', '.area', (e) => {
+		const area_id = $(e.target).closest('.area')[0].id.split('area')[1];
 		firebaseApi.addAttractionTypeName(area_id);
 	});
+
 };
 
 const selectAttractionsTime = () => {
@@ -71,7 +71,7 @@ const initializeEvents = () => {
   searchBox();
   displayAttractionsByArea();
   selectAttractionsTime();
-	copyrightDate();
+  copyrightDate();
 };
 
 module.exports = { initializeEvents };

@@ -1,11 +1,38 @@
 "use strict";
 
+let populateMapInfo = (areas) => {
+	let domString = '';
+	areas.forEach((area) => {
+		if(area.id === 7) {
+			domString += `<div id="area7" class="area col-md-4 col-md-offset-8">
+							<h4>${area.name}</h4>
+						  	<p>${area.description}</p>
+						  </div>`;
+		}else{
+		domString += `<div id="area${area.id}" class="area col-md-4">
+						<h4>${area.name}</h4>
+					  	<p>${area.description}</p>
+					  </div>`;
+		}
+	printMapInfo(domString);
+	});
+};
+
+let printMapInfo = (strang) => {
+	$('#areas').html(strang);
+};
+
+
 let populateHoursOfOperation = (hoursOfOperation) => {
 	let domString = '';
 	for (let i = 0; i < hoursOfOperation.length; i++) {
 		domString += `<li class="dropdown-item">${hoursOfOperation[i]}</li>`;
 	}
 	printHoursOfOperation(domString);
+};
+
+let printHoursOfOperation = (strang) => {
+	$('#hoursDropdown').html(strang);
 };
 
 // Prints all attractions with an area_id matching the area_id of e.target to the list container:
@@ -35,13 +62,8 @@ let printAttractionsWithAreas = (attractionsWithAreas) => {
   printToListContainer(domString);
 };
 
-
-let printHoursOfOperation = (strang) => {
-	$('#hoursDropdown').html(strang);
-};
-
 let printToListContainer = (strang) => {
 	$('#listContainer').html(strang);
 };
 
-module.exports = {printAttractionsWithTypes, populateHoursOfOperation, printAttractionsWithAreas};
+module.exports = {printAttractionsWithTypes, populateHoursOfOperation, printAttractionsWithAreas, populateMapInfo};

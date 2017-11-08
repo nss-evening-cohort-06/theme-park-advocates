@@ -1,23 +1,44 @@
 @import "variables";
 
+// html, body {
+//   overflow-y:hidden;
+//   height:100%;
+// }
+
 #mainContainer {
 	margin: 2%;
 }
 
+.btn {
+	margin-left: 100px;
+}
+
+
 #listContainer {
 	min-height: 70vh;
 	text-align: center;
+	padding: 15px;
+	padding-right: 20px;
+	height: 76vh;
+	overflow: scroll;
 }
 
 #mapContainer {
 	min-height: 70vh;
 	text-align: center;
-
+	overflow-y:hidden;
+  	height:100%;
 
 
 	.areas {
 	height: 20vh;
 	}
+
+		.area{
+			height: 24vh;
+			overflow: scroll;
+		}
+
 }
 #area1 {
 	background-color: $area1;
