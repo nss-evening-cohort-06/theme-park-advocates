@@ -226,20 +226,17 @@ const outOfOrderRides = (selectedAttractions, value) => {
 };
 
 const theUpsideDown = (attractions) => {
+  $(".areas").removeClass('downIsUp');
+  $(".attractions").removeClass('upIsDown');
   let searchTerms = ["away", "beneath", "blinking", "broken", "camera", "christmas", "claws", "cruiser", "darkness", "enchanted", "evil", "film", "forgotten", "friend", "gasoline", "ghost", "gloomy", "hawkins", "hidden", "hungry", "indiana", "invisible", "labyrinth", "lights", "merlin", "mike", "monsters", "neon", "nighttime", "party", "portal", "pulsate", "school", "sheriff", "spellbinding", "supernatural", "thunder", "underground", "vintage", "waffle"];
   Object.keys(attractions).forEach((attraction) => {
     searchTerms.forEach((term) => {
-      //if (attractions[attraction].description.split(" ").join("").match(term)) {
-     if (new RegExp("\\b" + term + "\\b", "i").search(attractions[attraction].description) > -1) {
-      console.log("attractions", attractions[attraction].description);
-      console.log(term);
-    }
+     if ($.inArray(term, attractions[attraction].description.split(' ')) > -1) {
+        $("#attraction_"+attractions[attraction].id).addClass('upIsDown');
+        $("#area"+attractions[attraction].area_id).addClass('downIsUp');
+      }
+    });
   });
-  });
-
-
-
-
   return attractions;
 };
 

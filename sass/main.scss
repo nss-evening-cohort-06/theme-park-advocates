@@ -17,7 +17,7 @@
 
 	.areas {
 	height: 20vh;
-	}	
+	}
 }
 #area1 {
 	background-color: $area1;
@@ -64,4 +64,12 @@
 
 .dotborder {
 	border: 3px dotted blue;
+}
+
+.upIsDown {
+	background-color: $upsideDownColor;
+}
+
+.downIsUp {
+	background-image: url("../images/strangerthings.jpg");
 }
