@@ -13,6 +13,7 @@ const getKey = () => {
 
 const setKey = (key) => {
   firebaseKey = key;
+  getAreas(); 
   getHoursOfOperation();
   attractionsWithAreaName();
 };
@@ -34,6 +35,8 @@ const getFirebaseData = (collection) => {
 const getAreas = () => {
   return new Promise((resolve, reject) => {
     getFirebaseData("areas").then((areas) => {
+      console.log("areas", areas);
+    dom.populateMapInfo(areas);
     resolve(areas);
     });
   });
@@ -59,6 +62,7 @@ const getAttractionTypes = () => {
 const getParkInfo = () => {
   return getFirebaseData("park-info");
 };
+
 
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {

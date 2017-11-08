@@ -1,6 +1,5 @@
 "use strict";
 
-
 const firebaseApi = require("./firebaseApi");
 
 // Object -> Boolean
