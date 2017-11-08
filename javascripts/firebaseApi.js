@@ -6,32 +6,11 @@ let firebaseKey = "";
 let hoursOfOperation = [];
 let attractionsWithAreaNames = [];
 
-// const getKey = () => {
-//   return firebaseKey;
-//
-// };
-
 const setKey = (key) => {
   firebaseKey = key;
   getHoursOfOperation();
   attractionsWithAreaName();
 };
-
-// Delete this one //
-const getFirebaseData = (collection) => {
-  return new Promise((resolve, reject) => {
-    $.ajax(`${firebaseKey.databaseURL}/${collection}.json`)
-      .then((data) => {
-        if (data != null) {
-          resolve(data);
-        }
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
-// End Delete This One //
 
 // --- promises to get data from each collection --- //
 const getAreas = () => {
@@ -236,22 +215,32 @@ const outOfOrderRides = (selectedAttractions, value) => {
     Object.keys(selectedAttractions).forEach((key) => {
       if (selectedAttractions[key].out_of_order != true) {
         workingAttractions.push(selectedAttractions[key]);
-
       }
-// for testing purposes remove before final deploy //
-      else {
-        outOfOrderAttractions.push(selectedAttractions[key]);
-
-      }
-          console.log("out of order rides", outOfOrderAttractions);
-// end for testing purposes remove before final deploy //
     });
-    if (value) {
-      dom.printAttractionsWithTypes(workingAttractions);
-    } else {
-      dom.printAttractionsWithAreas(workingAttractions);
+  if (value) {
+    dom.printAttractionsWithTypes(workingAttractions);
+  } else {
+    dom.printAttractionsWithAreas(workingAttractions);
     }
   }
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
+const theUpsideDown = (attractions) => {
+  let searchTerms = ["away", "beneath", "blinking", "broken", "camera", "christmas", "claws", "cruiser", "darkness", "enchanted", "evil", "film", "forgotten", "friend", "gasoline", "ghost", "gloomy", "hawkins", "hidden", "hungry", "indiana", "invisible", "labyrinth", "lights", "merlin", "mike", "monsters", "neon", "nighttime", "party", "portal", "pulsate", "school", "sheriff", "spellbinding", "supernatural", "thunder", "underground", "vintage", "waffle"];
+  Object.keys(attractions).forEach((attraction) => {
+    searchTerms.forEach((term) => {
+      //console.log(term);
+     if (attractions[attraction].description.split(" ").join("").match(term)) {
+      console.log("attractions", attractions[attraction].description);
+      console.log(term);
+    }
+  });
+  });
+
+
+
+
+  return attractions;
+};
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime, theUpsideDown};

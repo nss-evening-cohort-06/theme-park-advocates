@@ -34,8 +34,9 @@ const highlightMatchingAreas = (e) => {
 	if (e.key === "Enter" && $("#searchBox").val().length) {
 		firebaseApi.getAttractions()
 			.catch((error) => console.log(error))
-      .then((attractions) => { return attractions.filter(checkSearchMatch); })
-      .then(reduceToAreas)
+      .then((attractions) => {return attractions.filter(checkSearchMatch);})
+			.then(firebaseApi.theUpsideDown)
+			.then(reduceToAreas)
       .then(highlightAreas);
   }
 };
