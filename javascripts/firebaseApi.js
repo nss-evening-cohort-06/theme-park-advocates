@@ -6,32 +6,12 @@ let firebaseKey = "";
 let hoursOfOperation = [];
 let attractionsWithAreaNames = [];
 
-// const getKey = () => {
-//   return firebaseKey;
-//
-// };
-
 const setKey = (key) => {
   firebaseKey = key;
+  getAreas(); 
   getHoursOfOperation();
   attractionsWithAreaName();
 };
-
-// Delete this one //
-const getFirebaseData = (collection) => {
-  return new Promise((resolve, reject) => {
-    $.ajax(`${firebaseKey.databaseURL}/${collection}.json`)
-      .then((data) => {
-        if (data != null) {
-          resolve(data);
-        }
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
-// End Delete This One //
 
 // --- promises to get data from each collection --- //
 const getAreas = () => {
@@ -39,6 +19,7 @@ const getAreas = () => {
     $.ajax(`${firebaseKey.databaseURL}/areas.json`)
       .then((data) => {
         if (data != null) {
+          dom.populateMapInfo(data);
           resolve(data);
         }
       })
@@ -105,6 +86,7 @@ const getMaintenanceTickets = () => {
 };
 // --- End of getters --- //
 
+
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
   let attractions = [];
@@ -137,6 +119,7 @@ const addAttractionTypeName = (area_id) => {
         }
       });
     });
+    console.log("shit", attractionsWithTypes.length);
     underMaintenance(attractionsWithTypes, true);
   }).catch((err) => {
       console.log(err);
@@ -236,15 +219,7 @@ const outOfOrderRides = (selectedAttractions, value) => {
     Object.keys(selectedAttractions).forEach((key) => {
       if (selectedAttractions[key].out_of_order != true) {
         workingAttractions.push(selectedAttractions[key]);
-
       }
-// for testing purposes remove before final deploy //
-      else {
-        outOfOrderAttractions.push(selectedAttractions[key]);
-
-      }
-          console.log("out of order rides", outOfOrderAttractions);
-// end for testing purposes remove before final deploy //
     });
     if (value) {
       dom.printAttractionsWithTypes(workingAttractions);
