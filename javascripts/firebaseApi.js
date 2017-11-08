@@ -228,6 +228,7 @@ const outOfOrderRides = (selectedAttractions, value) => {
   }
 };
 
+// using the searched attractions search their descriptions for the listed terms and change their background and area background
 const theUpsideDown = (attractions) => {
   $(".area").removeClass('downIsUp');
   $(".attractions").removeClass('upIsDown');
