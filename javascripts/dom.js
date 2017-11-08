@@ -4,12 +4,12 @@ let populateMapInfo = (areas) => {
 	let domString = '';
 	areas.forEach((area) => {
 		if(area.id === 7) {
-			domString += `<div id="area7" class="area col-md-4 col-md-offset-8 area">	
+			domString += `<div id="area7" class="area col-md-4 col-md-offset-8">	
 							<h4>${area.name}</h4>
 						  	<p>${area.description}</p>
 						  </div>`;
 		}else{
-		domString += `<div id="area${area.id}" class="area col-md-4 area">	
+		domString += `<div id="area${area.id}" class="area col-md-4">	
 						<h4>${area.name}</h4>
 					  	<p>${area.description}</p>
 					  </div>`;

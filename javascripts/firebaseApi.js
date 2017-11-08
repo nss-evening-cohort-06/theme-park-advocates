@@ -119,6 +119,7 @@ const addAttractionTypeName = (area_id) => {
         }
       });
     });
+    console.log("shit", attractionsWithTypes.length);
     underMaintenance(attractionsWithTypes, true);
   }).catch((err) => {
       console.log(err);
@@ -218,15 +219,7 @@ const outOfOrderRides = (selectedAttractions, value) => {
     Object.keys(selectedAttractions).forEach((key) => {
       if (selectedAttractions[key].out_of_order != true) {
         workingAttractions.push(selectedAttractions[key]);
-
       }
-// for testing purposes remove before final deploy //
-      else {
-        outOfOrderAttractions.push(selectedAttractions[key]);
-
-      }
-          console.log("out of order rides", outOfOrderAttractions);
-// end for testing purposes remove before final deploy //
     });
     if (value) {
       dom.printAttractionsWithTypes(workingAttractions);
