@@ -8,9 +8,6 @@ let attractionsWithAreaNames = [];
 
 const setKey = (key) => {
   firebaseKey = key;
-  getAreas();
-  getHoursOfOperation();
-  attractionsWithAreaName();
 };
 
 // --- promises to get data from each collection --- //
@@ -245,4 +242,4 @@ const theUpsideDown = (attractions) => {
   return attractions;
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime, theUpsideDown};
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime, theUpsideDown, attractionsWithAreaName};
