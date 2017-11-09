@@ -15,7 +15,7 @@ const apiKeys = () => {
 };
 
 const retrieveKeys = () => {
-  apiKeys()
+  return apiKeys()
     .then((results) => {
       firebaseApi.setKey(results.firebaseKeys);
       firebase.initializeApp(results.firebaseKeys);
