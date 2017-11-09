@@ -12,7 +12,7 @@
 .btn {
 	margin-left: 100px;
 }
-	
+
 
 #listContainer {
 	min-height: 70vh;
@@ -30,10 +30,15 @@
   	height:100%;
 
 
+	.areas {
+	height: 20vh;
+	}
+
 		.area{
 			height: 24vh;
 			overflow: scroll;
-		}	
+		}
+
 }
 #area1 {
 	background-color: $area1;
@@ -80,4 +85,12 @@
 
 .dotborder {
 	border: 3px dotted blue;
+}
+
+.upIsDown {
+	background-color: $upsideDownColor;
+}
+
+.downIsUp {
+	background-image: url("../images/strangerthings.jpg");
 }

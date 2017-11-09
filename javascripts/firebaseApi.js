@@ -8,7 +8,7 @@ let attractionsWithAreaNames = [];
 
 const setKey = (key) => {
   firebaseKey = key;
-  getAreas(); 
+  getAreas();
   getHoursOfOperation();
   attractionsWithAreaName();
 };
@@ -95,7 +95,6 @@ const getAttractionsByArea = (area_id) => {
     $.ajax(`https://theme-park-advocates.firebaseio.com/attractions.json?orderBy="area_id"&equalTo=${area_id}`)
       .then((results) => {
         Object.keys(results).forEach((result) => {
-          results[result].id = result;
           attractions.push(results[result]);
         });
         resolve(attractions);
@@ -104,6 +103,8 @@ const getAttractionsByArea = (area_id) => {
       });
   });
 };
+
+
 
 const addAttractionTypeName = (area_id) => {
   let attractionsWithTypes = [];
@@ -120,7 +121,6 @@ const addAttractionTypeName = (area_id) => {
         }
       });
     });
-    console.log("shit", attractionsWithTypes.length);
     underMaintenance(attractionsWithTypes, true);
   }).catch((err) => {
       console.log(err);
@@ -222,12 +222,28 @@ const outOfOrderRides = (selectedAttractions, value) => {
         workingAttractions.push(selectedAttractions[key]);
       }
     });
-    if (value) {
-      dom.printAttractionsWithTypes(workingAttractions);
-    } else {
-      dom.printAttractionsWithAreas(workingAttractions);
+  if (value) {
+    dom.printAttractionsWithTypes(workingAttractions);
+  } else {
+    dom.printAttractionsWithAreas(workingAttractions);
     }
   }
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime};
+// using the searched attractions search their descriptions for the listed terms and change their background and area background
+const theUpsideDown = (attractions) => {
+  $(".area").removeClass('downIsUp');
+  $(".attractions").removeClass('upIsDown');
+  let searchTerms = ["away", "beneath", "blinking", "broken", "camera", "christmas", "claws", "cruiser", "darkness", "enchanted", "evil", "film", "forgotten", "friend", "gasoline", "ghost", "gloomy", "hawkins", "hidden", "hungry", "indiana", "invisible", "labyrinth", "lights", "merlin", "mike", "monsters", "neon", "nighttime", "party", "portal", "pulsate", "school", "sheriff", "spellbinding", "supernatural", "thunder", "underground", "vintage", "waffle"];
+  Object.keys(attractions).forEach((attraction) => {
+    searchTerms.forEach((term) => {
+     if ($.inArray(term, attractions[attraction].description.split(' ')) > -1) {
+        $("#attraction_"+attractions[attraction].id).addClass('upIsDown');
+        $("#area"+attractions[attraction].area_id).addClass('downIsUp');
+      }
+    });
+  });
+  return attractions;
+};
+
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea, getHoursOfOperation, addAttractionTypeName, showEventsByTime, theUpsideDown};
