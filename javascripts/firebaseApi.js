@@ -6,6 +6,7 @@ let firebaseKey = "";
 let hoursOfOperation = [];
 let attractionsWithAreaNames = [];
 
+// --- set API key and call functions needed on load ---
 const setKey = (key) => {
   firebaseKey = key;
   getAreas();
@@ -13,7 +14,9 @@ const setKey = (key) => {
   attractionsWithAreaName();
 };
 
-// --- promises to get data from each collection --- //
+// --- Getters --- //
+
+// --- Promise to get all AREAS - Called in setKey to populate map info on load --- //
 const getAreas = () => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/areas.json`)
@@ -29,6 +32,7 @@ const getAreas = () => {
   });
 };
 
+// --- Promise to get all ATTRACTIONS --- //
 const getAttractions = () => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/attractions.json`)
@@ -43,6 +47,7 @@ const getAttractions = () => {
   });
 };
 
+// --- Promise to get all TYPES --- //
 const getAttractionTypes = () => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/attraction_types.json`)
@@ -57,6 +62,7 @@ const getAttractionTypes = () => {
   });
 };
 
+// --- Promise to get PARK INFO --- //
 const getParkInfo = () => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/park-info.json`)
@@ -71,6 +77,7 @@ const getParkInfo = () => {
   });
 };
 
+// --- Promise to get all MAITENANCE TICKETS --- //
 const getMaintenanceTickets = () => {
   return new Promise((resolve, reject) => {
     $.ajax(`${firebaseKey.databaseURL}/maintenance_tickets.json`)
@@ -84,10 +91,11 @@ const getMaintenanceTickets = () => {
       });
   });
 };
-// --- End of getters --- //
 
+// --- End of Getters --- //
 
-// Returns an array consisting all attractions with an area_id matching the area_id of e.target:
+// --- 
+// Returns an array consisting of all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
   let attractions = [];
   return new Promise((resolve, reject) => {
@@ -104,10 +112,10 @@ const getAttractionsByArea = (area_id) => {
 };
 
 
-
+// Creates attraction.type_name key with a value === type.name then runs underMaintenance. Called in displayAttractionsByArea in events.js
 const addAttractionTypeName = (area_id) => {
   let attractionsWithTypes = [];
-  // The following Promise.all will return an array containing 3 indexes, 0 will be an array consisting all attractions with an area_id matching the area_id of e.target (from getAttractionsByArea), 1 will be an array consisting of all types (from getAttractionsByType):
+  // The following Promise.all will return an array containing 2 indexes, 0 will be an array consisting all attractions with an area_id matching the area_id of e.target (from getAttractionsByArea), 1 will be an array consisting of all types (from getAttractionsByType):
   Promise.all([getAttractionsByArea(area_id), getAttractionTypes()])
   .then((values) => {
     values[0].forEach((attraction) => {
@@ -126,6 +134,7 @@ const addAttractionTypeName = (area_id) => {
     });
 };
 
+// Creates attraction.area_name key with a value === area.name and pushes it into the global array, attractionsWithAreaNames. 
 const attractionsWithAreaName = () => {
   Promise.all([getAttractions(), getAreas()])
   .then((values) => {
@@ -143,6 +152,7 @@ const attractionsWithAreaName = () => {
   });
 };
 
+// Creates individual hours of operation (format ex. "9:00AM") and is then printed to #hoursDropdown
 const getHoursOfOperation = () => {
   let hour = '';
   for(let i = 9; i < 22; i++) {
@@ -152,12 +162,14 @@ const getHoursOfOperation = () => {
   dom.populateHoursOfOperation(hoursOfOperation);
 };
 
+// Returns current time formatted as whole hour (ex. "9:00AM") which is called in showEventsByTime
 const setCurrentTime = () => {
   let realTime = "";
   realTime = moment().format("MMMM Do YYYY, h:mm:ss a");
   return moment(realTime, "MMMM DO YYYY, h:mm:ss a").format("H:00A");
 };
 
+// Displays attractions for current time in listContainer on load and is called in selectAttractionsTime in events.js
 const showEventsByTime = (time) => {
   let displayedHour;
 

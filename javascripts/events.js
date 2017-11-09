@@ -55,6 +55,7 @@ const displayAttractionsByArea = () =>	{
 
 };
 
+// Event to display attractions in the list container based on selectedTime from drop down menu
 const selectAttractionsTime = () => {
 	$('#hoursDropdown').on('click', '.dropdown-item', (e) => {
 		let selectedTime = e.target.innerHTML;
