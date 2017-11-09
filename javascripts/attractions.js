@@ -1,7 +1,10 @@
 "use strict";
 
 const firebaseApi = require('./firebaseApi');
+const dom = require('./dom');
 
+let hoursOfOperation = [];
+let attractionsWithAreaNamesArray = [];
 
 // --- DATA RELATED FUNCTIONS --- //
 
@@ -18,13 +21,13 @@ const addAttractionTypeName = (area_id) => {
         }
       });
     });
-    time.underMaintenance(attractionsWithTypes, true);
+    underMaintenance(attractionsWithTypes, true);
   }).catch((err) => {
       console.log(err);
     });
 };
 
-// Creates attraction.area_name key with a value === area.name and pushes it into the global array, attractionsWithAreaNames. 
+// Creates attraction.area_name key with a value === area.name and pushes it into the global array, attractionsWithAreaNamesArray. Called on load in main.js.
 const attractionsWithAreaName = () => {
   Promise.all([firebaseApi.getAttractions(), firebaseApi.getAreas()])
   .then((values) => {
@@ -32,17 +35,17 @@ const attractionsWithAreaName = () => {
       values[1].forEach((area) => {
         if(area.id === attraction.area_id){
           attraction.area_name = area.name;
-          attractionsWithAreaNames.push(attraction);
+          attractionsWithAreaNamesArray.push(attraction);
         }
       });
     });
-       time.showEventsByTime();
+       showEventsByTime();
     }).catch((err) => {
       console.log(err);
   });
 };
 
-// using the searched attractions search their descriptions for the listed terms and change their background and area background
+// using the searched attractions search their descriptions for the listed terms and change their background and area background. Called in events.js at highlightMatchingAreas.
 const theUpsideDown = (attractions) => {
   $(".area").removeClass('downIsUp');
   $(".attractions").removeClass('upIsDown');
@@ -61,7 +64,7 @@ const theUpsideDown = (attractions) => {
 
 // --- TIME RELATED FUNCTIONS --- //
 
-// Creates individual hours of operation (format ex. "9:00AM") and is then printed to #hoursDropdown
+// Creates individual hours of operation (format ex. "9:00AM") and is then printed to #hoursDropdown. Called on load in main.js.
 const getHoursOfOperation = () => {
   let hour = '';
   for(let i = 9; i < 22; i++) {
@@ -90,8 +93,7 @@ const showEventsByTime = (time) => {
 
   let displayedEventsArray = [];
   let eventsAtDisplayedHour = [];
-
-  attractionsWithAreaNames.forEach((attraction) => {
+  attractionsWithAreaNamesArray.forEach((attraction) => {
       if (attraction.times) {
         displayedEventsArray.push(attraction);
       }
@@ -107,10 +109,10 @@ const showEventsByTime = (time) => {
     underMaintenance(eventsAtDisplayedHour, false);
 };
 
-// evaluate if maintenance is currently happening and if so set out_of_order to true
+// evaluate if maintenance is currently happening and if so set out_of_order to true. Called in addAttractionTypeName & showEventsByTime
 const underMaintenance = (selectedAttractions, value) => {
   let currentTime = moment().format();
-  getMaintenanceTickets().then((tickets) => {
+  firebaseApi.getMaintenanceTickets().then((tickets) => {
     Object.keys(tickets).forEach((ticket) => {
       Object.keys(selectedAttractions).forEach((key) => {
         if (selectedAttractions[key].id === tickets[ticket].attraction_id){
@@ -132,7 +134,7 @@ const underMaintenance = (selectedAttractions, value) => {
   });
 };
 
-// evaluate if attractions "out_of_order" status is not true and push into workingAttractions array
+// evaluate if attractions "out_of_order" status is not true and push into workingAttractions array. Called in showEventsByTime.
 const outOfOrderRides = (selectedAttractions, value) => {
   let workingAttractions = [];
   let outOfOrderAttractions = [];
@@ -150,10 +152,6 @@ const outOfOrderRides = (selectedAttractions, value) => {
   }
 };
 
-const initializeAttractions = () => {
-	{addAttractionTypeName, 
-	 attractionsWithAreaName, 
-	 theUpsideDown, 
-	 getHoursOfOperation, };
-}
+module.exports = {theUpsideDown, addAttractionTypeName, attractionsWithAreaName, getHoursOfOperation, showEventsByTime};
+
 

@@ -3,15 +3,10 @@
 const dom = require("./dom");
 
 let firebaseKey = "";
-let hoursOfOperation = [];
-let attractionsWithAreaNames = [];
 
 // --- set API key and call functions needed on load ---
 const setKey = (key) => {
   firebaseKey = key;
-  getAreas();
-  getHoursOfOperation();
-  attractionsWithAreaName();
 };
 
 // --- Getters --- //
@@ -108,4 +103,5 @@ const getAttractionsByArea = (area_id) => {
   });
 };
 
-module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo, getAttractionsByArea};
+module.exports = { setKey, getAreas, getAttractionTypes, getAttractions, getParkInfo,getMaintenanceTickets, getAttractionsByArea};
+

@@ -1,6 +1,7 @@
 "use strict";
 
 const firebaseApi = require("./firebaseApi");
+const attr = require("./attractions");
 
 // Object -> Boolean
 // Checks whether the object's "name" key includes the search text and returns true or false for filtering purposes
@@ -35,7 +36,7 @@ const highlightMatchingAreas = (e) => {
 		firebaseApi.getAttractions()
 			.catch((error) => console.log(error))
       .then((attractions) => {return attractions.filter(checkSearchMatch);})
-			.then(firebaseApi.theUpsideDown)
+			.then(attr.theUpsideDown)
 			.then(reduceToAreas)
       .then(highlightAreas);
   }
@@ -50,7 +51,7 @@ const searchBox = () => {
 const displayAttractionsByArea = () =>	{
 	$('#areas').on('click', '.area', (e) => {
 		const area_id = $(e.target).closest('.area')[0].id.split('area')[1];
-		firebaseApi.addAttractionTypeName(area_id);
+		attr.addAttractionTypeName(area_id);
 	});
 
 };
@@ -59,7 +60,7 @@ const displayAttractionsByArea = () =>	{
 const selectAttractionsTime = () => {
 	$('#hoursDropdown').on('click', '.dropdown-item', (e) => {
 		let selectedTime = e.target.innerHTML;
-		firebaseApi.showEventsByTime(selectedTime);
+		attr.showEventsByTime(selectedTime);
 	});
 };
 
