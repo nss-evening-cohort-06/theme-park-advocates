@@ -3,22 +3,19 @@
 const apiKeys = require("./apiKeys");
 const events = require("./events");
 const firebaseApi = require("./firebaseApi");
+const attractions = require("./attractions");
 
 const main = () => {
-  console.log(firebaseApi);
   apiKeys.apiKeys()
     .then((results) => {
-      console.log(results);
-      console.log(firebaseApi.setKey);
       firebaseApi.setKey(results.firebaseKeys);
-      firebase.initializeApp(results.firebaseKeys);
       firebaseApi.getAreas();
-      firebaseApi.getHoursOfOperation();
-      firebaseApi.attractionsWithAreaName();
+      attractions.getHoursOfOperation();
+      attractions.attractionsWithAreaName();
+      attractions.showEventsByTime();
       events.initializeEvents();
     });
 
 };
 
 main();
-

@@ -1,16 +1,17 @@
 "use strict";
 
+// Prints map info on load, called in getAreas in firebaseApi.js
 let populateMapInfo = (areas) => {
 	let domString = '';
 	areas.forEach((area) => {
 		if(area.id === 7) {
 			domString += `<div id="area7" class="area col-md-4 col-md-offset-8">
-							<h4>${area.name}</h4>
+							<h3>${area.name}</h4>
 						  	<p>${area.description}</p>
 						  </div>`;
 		}else{
 		domString += `<div id="area${area.id}" class="area col-md-4">
-						<h4>${area.name}</h4>
+						<h3>${area.name}</h4>
 					  	<p>${area.description}</p>
 					  </div>`;
 		}
@@ -22,7 +23,7 @@ let printMapInfo = (strang) => {
 	$('#areas').html(strang);
 };
 
-
+// Prints hours of operation in drop down menu on load, called in getHoursOfOperation in firebaseApi.js
 let populateHoursOfOperation = (hoursOfOperation) => {
 	let domString = '';
 	for (let i = 0; i < hoursOfOperation.length; i++) {
@@ -35,7 +36,7 @@ let printHoursOfOperation = (strang) => {
 	$('#hoursDropdown').html(strang);
 };
 
-// Prints all attractions with an area_id matching the area_id of e.target to the list container:
+// Prints all attractions with an area_id matching the area_id of e.target to the list container, called in outOfOrderRides in firebaseApi.js
 let printAttractionsWithTypes = (attractionsWithTypes) => {
 	let domString = '';
 	for(let i = 0; i < attractionsWithTypes.length; i++) {
@@ -60,6 +61,7 @@ let printAttractionsWithTypes = (attractionsWithTypes) => {
 	});
 };
 
+// Prints all attractions for current and/or selectedTime to the list container, called in outOfOrderRides in firebaseApi.js
 let printAttractionsWithAreas = (attractionsWithAreas) => {
 	let domString = '';
 		for(let i = 0; i < attractionsWithAreas.length; i++) {
