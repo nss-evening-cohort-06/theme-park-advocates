@@ -40,28 +40,49 @@ let printHoursOfOperation = (strang) => {
 let printAttractionsWithTypes = (attractionsWithTypes) => {
 	let domString = '';
 	for(let i = 0; i < attractionsWithTypes.length; i++) {
-	domString += `<div class="text-left attractions" id="attraction_${attractionsWithTypes[i].id}">
-					<a href=""><p class="">${attractionsWithTypes[i].name}</a> (${attractionsWithTypes[i].type_name})</p>
-					<div id="attractionDescription" class="hide">
+		domString += `<div class="text-left attractions" id="attraction_${attractionsWithTypes[i].id}">
+					<a class="attractionLink" href="#">${attractionsWithTypes[i].name}</a> (${attractionsWithTypes[i].type_name})
+					<div class="attractionDescription hide">
 						<p>${attractionsWithTypes[i].description}</p>
-					</div>
-				  </div>`;
+					</div>`;
+		if (attractionsWithTypes[i].times) {
+			domString += `<div class="attractionTimes hide">
+				<p>${attractionsWithTypes[i].times.join(", ")}</p>
+				</div>`;
+		}
+		domString += `</div>`;
 	}
+	
 	printToListContainer(domString);
+	$(".attractionLink").click((event) => {
+		$(".attractionDescription").addClass("hide");
+		$(".attractionTimes").addClass("hide");
+		$(event.target).parent().children().removeClass("hide");
+	});
 };
 
 // Prints all attractions for current and/or selectedTime to the list container, called in outOfOrderRides in firebaseApi.js
 let printAttractionsWithAreas = (attractionsWithAreas) => {
 	let domString = '';
 		for(let i = 0; i < attractionsWithAreas.length; i++) {
-	domString += `<div class="text-left attractions" id="attraction_${attractionsWithAreas[i].id}">
-									<a href=""><p class="">${attractionsWithAreas[i].name}</a> (${attractionsWithAreas[i].area_name})</p>
-									<div id="attractionDescription" class="hide">
+			domString += `<div class="text-left attractions" id="attraction_${attractionsWithAreas[i].id}">
+									<a class="attractionLink" href="#">${attractionsWithAreas[i].name}</a> (${attractionsWithAreas[i].area_name})
+									<div class="attractionDescription hide">
 										<p>${attractionsWithAreas[i].description}</p>
-									</div>
-				  			</div>`;
+									</div>`;
+			if (attractionsWithAreas[i].times) {
+				domString += `<div class="attractionTimes hide">
+				<p>${attractionsWithAreas[i].times.join(", ")}</p>
+				</div>`;
+			}
+	domString +=		`</div>`;
   }
-  printToListContainer(domString);
+	printToListContainer(domString);
+	$(".attractionLink").click((event) => {
+		$(".attractionDescription").addClass("hide");
+		$(".attractionTimes").addClass("hide");
+		$(event.target).parent().children().removeClass("hide");
+	});
 };
 
 let printToListContainer = (strang) => {

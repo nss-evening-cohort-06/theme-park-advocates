@@ -75,4 +75,5 @@ const initializeEvents = () => {
   copyrightDate();
 };
 
+
 module.exports = { initializeEvents };
