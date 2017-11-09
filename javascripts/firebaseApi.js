@@ -94,7 +94,6 @@ const getAttractionsByArea = (area_id) => {
     $.ajax(`https://theme-park-advocates.firebaseio.com/attractions.json?orderBy="area_id"&equalTo=${area_id}`)
       .then((results) => {
         Object.keys(results).forEach((result) => {
-          results[result].id = result;
           attractions.push(results[result]);
         });
         resolve(attractions);
@@ -103,6 +102,8 @@ const getAttractionsByArea = (area_id) => {
       });
   });
 };
+
+
 
 const addAttractionTypeName = (area_id) => {
   let attractionsWithTypes = [];
@@ -236,8 +237,6 @@ const theUpsideDown = (attractions) => {
   Object.keys(attractions).forEach((attraction) => {
     searchTerms.forEach((term) => {
      if ($.inArray(term, attractions[attraction].description.split(' ')) > -1) {
-        // console.log(term);
-        // console.log(attractions[attraction]);
         $("#attraction_"+attractions[attraction].id).addClass('upIsDown');
         $("#area"+attractions[attraction].area_id).addClass('downIsUp');
       }
