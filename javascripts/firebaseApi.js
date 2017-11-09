@@ -89,6 +89,7 @@ const getMaintenanceTickets = () => {
 
 // Returns an array consisting all attractions with an area_id matching the area_id of e.target:
 const getAttractionsByArea = (area_id) => {
+  console.log("getAttractionsByArea");
   let attractions = [];
   return new Promise((resolve, reject) => {
     $.ajax(`https://theme-park-advocates.firebaseio.com/attractions.json?orderBy="area_id"&equalTo=${area_id}`)
