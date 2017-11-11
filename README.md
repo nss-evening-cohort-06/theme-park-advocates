@@ -41,11 +41,11 @@ If the attraction description contains any 'keywords', then the attraction (if d
 
 **List Container:**
 
-On load all events occuring in the current hour should appear in the list container with their correlating area in parenthasis.
+On load all events occuring in the current hour should appear in the list container with their correlating area in parentheses.
 
-When a time is selected from the drop down menu, all events occuring in that hour should appear in the list container with their correlating area in parenthasis.
+When a time is selected from the drop down menu, all events occuring in that hour should appear in the list container with their correlating area in parentheses.
 
-On the Park Map when the user clicks on an area, all attractions within that area should appear in the list container with their correlating attraction type in parenthasis.
+On the Park Map when the user clicks on an area, all attractions within that area should appear in the list container with their correlating attraction type in parentheses.
 
 All attractions should appear as links. When clicked,  the description of the attraction, and/or its hours of operation should be displayed directly beneath the hyperlink, and before the next one.
 
